@@ -5,3 +5,4 @@ generated
 qr_code_creation.ipynb
 desktop.ini
 QRCodes
+__pycache__

@@ -6,63 +6,20 @@ from docx.enum.section import WD_ORIENTATION
 from docx.oxml.ns import qn
 from docx.shared import Inches
 from docx2pdf import convert
-import qrcode
-from PIL import Image, ImageDraw, ImageFont
-from qrcode.main import QRCode
+from PIL import Image
 import re
+from generate_qr import generate_qr_with_label
 
-def generate_qr_with_label(prefix, start, end, step=1):
-    # Determine the directory name based on the prefix
-    if 'AEDC' in prefix:
-        directory = 'QRCodes/AEDC'
-    elif 'ECG' in prefix:
-        directory = 'QRCodes/ECG'
-    else:
-        directory = 'QRCodes'
-
-    # Create the directory if it doesn't exist
-    os.makedirs(directory, exist_ok=True)
-
-    # Create an empty image to hold the QR Code and label
-    qr_size = 140  # Set the size of the QR Code image
-    font_size = 14
-    font_path = "C:\\Users\Moshood\\OneDrive\\dev\\python_data_profiling_scripts\\qrcode_generation\\fonts\\MonoBold-z8jG0.ttf"
-    font = ImageFont.truetype(font_path, font_size, encoding="unic")
-
-    for num in range(start, end+1, step):
-        # Create a new image to hold the QR code and label for the current tag
-        code = prefix + str(num).zfill(5)  # Pad the number with zeros to 5 digits
-        img = Image.new('RGB', (qr_size, qr_size+font_size), color='white')
-
-        # Generate the QR Code for the current tag and add it to the image
-        qr = qrcode.QRCode(box_size=5)
-        qr.add_data(code)
-        qr_img = qr.make_image()
-        qr_width, qr_height = qr_img.size
-        qr_x = (qr_size - qr_width) // 2  # Center the QR Code image horizontally
-        img.paste(qr_img, (qr_x, 0))
-
-        # Add the label text below the QR Code
-        label_text = code
-        label_width, label_height = font.getsize(label_text)
-        label_x = (qr_size - label_width) // 2  # Center the label text horizontally
-        label_y = qr_height - 15  # Place the label below the QR Code
-        label_draw = ImageDraw.Draw(img)
-        label_draw.text((label_x, label_y), label_text, font=font, fill='black', align='center',
-                        spacing=1, stroke_width=1, stroke_fill='white', antialias=True
-                        )
-
-        # Save the QR code and label as a PNG file with the code as the file name
-        filename = os.path.join(directory, code + '.png')
-        img.save(filename)
-
-    return
-
+#------------------------------------------------------------------------------------------------------------------#
+#------------------------ GENERATE QR CODE FOR THE SET RANGES USING THE CUSTOM FUNCTION ---------------------------#
+#------------------------------------------------------------------------------------------------------------------#
 img = generate_qr_with_label('AEDCBD00', 12802, 12804)
 
 
+#-------------------------------------------------------------------------------------------------------------#
+#-------------------------------- MERGE GENERATED CODES AND LOCATION LOGO ------------------------------------#
+#-------------------------------------------------------------------------------------------------------------#
 location = "AEDC"
-
 if location == 'AEDC':
     disco_logo = 'aedc-logo.png'
 elif location == 'ECG':
@@ -71,7 +28,7 @@ else:
     raise ValueError('Invalid location')
 
 asset = "BD"
-dir_name = f"C:\\Users\\Moshood\\OneDrive\\dev\\python_data_profiling_scripts\\qrcode_generation\\QRCodes\\{location}"
+dir_name = f"C:\\Users\\Moshood\\OneDrive\\dev\\qr_code_tag_generator\\QRCodes\\{location}"
 image_files = [f for f in os.listdir(dir_name) if f.endswith(".png")] # get a list of all PNG files in the folder
 
 global vtags_dir
@@ -99,6 +56,10 @@ for qc_name in image_files:
 
     logo_qc.save(os.path.join(vtags_dir, qc_name),"PNG")
     # logo_qc.show()
+
+#-------------------------------------------------------------------------------------------------#
+#------------------------ LOAD FILES INTO DOCX FILE AND CONVERT TO PDF ---------------------------#
+#-------------------------------------------------------------------------------------------------#
 
 pics = sorted(os.listdir(dir_name))
 pics[:4], len(pics)
