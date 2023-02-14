@@ -6,29 +6,33 @@ from docx.enum.section import WD_ORIENTATION
 from docx.oxml.ns import qn
 from docx.shared import Inches
 from docx2pdf import convert
-from PIL import Image
 import re
 from generate_qr import generate_qr_with_label
 
 #------------------------------------------------------------------------------------------------------------------#
 #------------------------ GENERATE QR CODE FOR THE SET RANGES USING THE CUSTOM FUNCTION ---------------------------#
 #------------------------------------------------------------------------------------------------------------------#
-img = generate_qr_with_label('AEDCBD00', 12802, 12804)
-
+prefix = 'AEDCBD00'
+start = 12805
+end = 12807
+step = 1
+img = generate_qr_with_label(prefix, start, end, step)
 
 #-------------------------------------------------------------------------------------------------------------#
 #-------------------------------- MERGE GENERATED CODES AND LOCATION LOGO ------------------------------------#
 #-------------------------------------------------------------------------------------------------------------#
-location = "AEDC"
-if location == 'AEDC':
+if prefix.startswith('AEDC'):
+    location = "AEDC"
     disco_logo = 'aedc-logo.png'
-elif location == 'ECG':
+elif prefix.startswith('ECG'):
+    location = 'ECG'
     disco_logo = 'ecg-ghana.jpg'
 else:
-    raise ValueError('Invalid location')
+    raise ValueError('Invalid prefix')
+
 
 asset = "BD"
-dir_name = f"C:\\Users\\Moshood\\OneDrive\\dev\\qr_code_tag_generator\\QRCodes\\{location}"
+dir_name = os.path.join(os.path.expanduser("~"),"OneDrive", "dev", "qr_code_tag_generator", "QRCodes", location)
 image_files = [f for f in os.listdir(dir_name) if f.endswith(".png")] # get a list of all PNG files in the folder
 
 global vtags_dir

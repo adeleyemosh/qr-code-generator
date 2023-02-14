@@ -18,7 +18,7 @@ def generate_qr_with_label(prefix, start, end, step=1):
     # Create an empty image to hold the QR Code and label
     qr_size = 140  # Set the size of the QR Code image
     font_size = 14
-    font_path = "C:\\Users\Moshood\\OneDrive\\dev\\python_data_profiling_scripts\\qrcode_generation\\fonts\\MonoBold-z8jG0.ttf"
+    font_path = os.path.join(os.path.expanduser("~"),"OneDrive", "dev", "qr_code_tag_generator", "fonts", "MonoBold-z8jG0.ttf")
     font = ImageFont.truetype(font_path, font_size, encoding="unic")
 
     for num in range(start, end+1, step):
