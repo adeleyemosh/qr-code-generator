@@ -13,10 +13,14 @@ from generate_qr import generate_qr_with_label
 #------------------------ GENERATE QR CODE FOR THE SET RANGES USING THE CUSTOM FUNCTION ---------------------------#
 #------------------------------------------------------------------------------------------------------------------#
 prefix = 'AEDCBD00'
-start = 12805
-end = 12807
+start = 11802
+end = 11902
 step = 1
 img = generate_qr_with_label(prefix, start, end, step)
+
+orientation = "PORTRAIT" #LANDSCAPE, PORTRAIT
+columns = 3
+
 
 #-------------------------------------------------------------------------------------------------------------#
 #-------------------------------- MERGE GENERATED CODES AND LOCATION LOGO ------------------------------------#
@@ -75,13 +79,18 @@ for section in sections:
     section.bottom_margin = Cm(1.27)
     section.left_margin = Cm(1.27)
     section.right_margin = Cm(1.27)
-    section.orientation = WD_ORIENTATION.LANDSCAPE
-    section.page_width = Cm(29.7)
-    section.page_height = Cm(21)
+    if orientation == 'PORTRAIT':
+        section.orientation = WD_ORIENTATION.PORTRAIT
+        section.page_width = Cm(21)
+        section.page_height = Cm(29.7)
+    else:
+        section.orientation = WD_ORIENTATION.LANDSCAPE
+        section.page_width = Cm(29.7)
+        section.page_height = Cm(21)
     sectPr = section._sectPr
     cols = sectPr.xpath('./w:cols')[0]
-    cols.set(qn('w:num'), '2')
-    cols.set(qn('w:space'), '10')  # Set space between columns to 10 points ->0.01"
+    cols.set(qn('w:num'), str(columns))
+    cols.set(qn('w:space'), '10')
 
 logo = os.path.join(os.getcwd(), disco_logo)
 
@@ -126,7 +135,15 @@ docx_file_name = f'{location} {vtags_dir} {asset} {qc_range}.docx'
 docx_file_name = re.sub(r'[:\\]', '_', docx_file_name)
 docx_file_path = os.path.join(document_dir, docx_file_name)
 
-# Save the Word document
+# Check if the file already exists and update the filename if necessary
+i = 1
+while os.path.exists(docx_file_path):
+    docx_file_name = f'{location} {vtags_dir} {asset} {qc_range} ({i}).docx'
+    docx_file_name = re.sub(r'[:\\]', '_', docx_file_name)
+    docx_file_path = os.path.join(document_dir, docx_file_name)
+    i += 1
+
+# Save the Word document with the updated filename
 document.save(docx_file_path)
 
 # Convert the Word document to PDF
@@ -136,5 +153,28 @@ pdf_dir_path = os.path.join(document_dir, 'pdf')
 if not os.path.exists(pdf_dir_path):
     os.makedirs(pdf_dir_path)
 pdf_file_path = os.path.join(pdf_dir_path, pdf_file_name)
+
+# Check if the file already exists and update the name if necessary
+if os.path.isfile(pdf_file_path):
+    i = 1
+    while True:
+        new_file_name = f'{location} {vtags_dir} {asset} {qc_range} ({i}).pdf'
+        new_file_path = os.path.join(pdf_dir_path, new_file_name)
+        if not os.path.isfile(new_file_path):
+            pdf_file_path = new_file_path
+            break
+        i += 1
+
 convert(docx_file_path, pdf_file_path)
 
+
+# Delete all image files in the QRCodes and VTags folders and their subdirectories
+for root, dirs, files in os.walk("QRCodes"):
+    for file in files:
+        if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+            os.remove(os.path.join(root, file))
+            
+for root, dirs, files in os.walk("VTags"):
+    for file in files:
+        if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
+            os.remove(os.path.join(root, file))
