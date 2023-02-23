@@ -7,16 +7,24 @@ from docx.oxml.ns import qn
 from docx.shared import Inches
 from docx2pdf import convert
 import re
-from generate_qr import generate_qr_with_label
+from generate_qr import generate_qr_with_label, generate_qr_from_file
 
 #------------------------------------------------------------------------------------------------------------------#
 #------------------------ GENERATE QR CODE FOR THE SET RANGES USING THE CUSTOM FUNCTION ---------------------------#
 #------------------------------------------------------------------------------------------------------------------#
 prefix = 'AEDCBD00'
-start = 11802
-end = 11902
+start = 11420
+end = 11801
 step = 1
-img = generate_qr_with_label(prefix, start, end, step)
+# img = generate_qr_with_label(prefix, start, end, step)
+
+#------------------------------------------------------------------------------------------------------------------#
+#---------- GENERATE QR CODE FOR THE RANGE OF NUMBERS IN A CSV OR EXCEL FILE USING THE CUSTOM FUNCTION ------------#
+#------------------------------------------------------------------------------------------------------------------#
+
+file_path = "C:/Users/Moshood/Downloads/missing_qr_numbers.xlsx"
+# Call the generate_qr_from_file function
+qr_codes = generate_qr_from_file(prefix, file_path)
 
 orientation = "PORTRAIT" #LANDSCAPE, PORTRAIT
 columns = 3
