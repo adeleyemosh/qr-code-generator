@@ -16,19 +16,18 @@ prefix = 'AEDCBD00'
 start = 11420
 end = 11801
 step = 1
-# img = generate_qr_with_label(prefix, start, end, step)
+img = generate_qr_with_label(prefix, start, end, step)
 
 #------------------------------------------------------------------------------------------------------------------#
 #---------- GENERATE QR CODE FOR THE RANGE OF NUMBERS IN A CSV OR EXCEL FILE USING THE CUSTOM FUNCTION ------------#
 #------------------------------------------------------------------------------------------------------------------#
 
-file_path = "C:/Users/Moshood/Downloads/missing_qr_numbers.xlsx"
+file_path = os.path.join(os.path.expanduser("~"),"Downloads", "missing_qr_numbers")
 # Call the generate_qr_from_file function
 qr_codes = generate_qr_from_file(prefix, file_path)
 
 orientation = "PORTRAIT" #LANDSCAPE, PORTRAIT
 columns = 3
-
 
 #-------------------------------------------------------------------------------------------------------------#
 #-------------------------------- MERGE GENERATED CODES AND LOCATION LOGO ------------------------------------#
@@ -41,7 +40,6 @@ elif prefix.startswith('ECG'):
     disco_logo = 'ecg-ghana.jpg'
 else:
     raise ValueError('Invalid prefix')
-
 
 asset = "BD"
 dir_name = os.path.join(os.path.expanduser("~"),"OneDrive", "dev", "qr_code_tag_generator", "QRCodes", location)
