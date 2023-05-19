@@ -8,15 +8,20 @@ from docx.shared import Inches
 from docx2pdf import convert
 import re
 from generate_qr import generate_qr_with_label, generate_qr_from_file
+import datetime
 
 #------------------------------------------------------------------------------------------------------------------#
 #------------------------ GENERATE QR CODE FOR THE SET RANGES USING THE CUSTOM FUNCTION ---------------------------#
 #------------------------------------------------------------------------------------------------------------------#
-prefix = 'AEDCLT00'
+print(f"[{datetime.datetime.now()}] Generating QR code for the set ranges...")
+
+prefix = 'AEDCCR00'
 start = 6353
-end = 8353
+end = 6554
 step = 1
 img = generate_qr_with_label(prefix, start, end, step)
+
+print(f"[{datetime.datetime.now()}] QR code generated successfully.")
 
 #------------------------------------------------------------------------------------------------------------------#
 #---------- GENERATE QR CODE FOR THE RANGE OF NUMBERS IN A CSV OR EXCEL FILE USING THE CUSTOM FUNCTION ------------#
@@ -38,6 +43,8 @@ columns = 3
 #-------------------------------------------------------------------------------------------------------------#
 #-------------------------------- MERGE GENERATED CODES AND LOCATION LOGO ------------------------------------#
 #-------------------------------------------------------------------------------------------------------------#
+print(f"[{datetime.datetime.now()}] Merging generated codes and location logo...")
+
 if prefix.startswith('AEDC'):
     location = "AEDC"
     disco_logo = 'aedc-logo.png'
@@ -77,9 +84,11 @@ for qc_name in image_files:
     logo_qc.save(os.path.join(vtags_dir, qc_name),"PNG")
     # logo_qc.show()
 
+print(f"[{datetime.datetime.now()}] Merged successfully.")
 #-------------------------------------------------------------------------------------------------#
 #------------------------ LOAD FILES INTO DOCX FILE AND CONVERT TO PDF ---------------------------#
 #-------------------------------------------------------------------------------------------------#
+print(f"[{datetime.datetime.now()}] Loading files into DOCX file...")
 
 pics = sorted(os.listdir(dir_name))
 pics[:4], len(pics)
@@ -158,13 +167,31 @@ while os.path.exists(docx_file_path):
 # Save the Word document with the updated filename
 document.save(docx_file_path)
 
+print(f"[{datetime.datetime.now()}] Loaded successfully.")
+
 # Convert the Word document to PDF
+def convert_to_pdf(input_path, output_path):
+    try:
+        convert(input_path, output_path)
+        return True
+    except Exception as e:
+        print(f"Error in conversion: {e}")
+        return False
+
+print(f"[{datetime.datetime.now()}] Converting to PDF...")
 pdf_file_name = f'{location} {vtags_dir} {asset} {qc_range}.pdf'
 pdf_file_name = re.sub(r'[:\\]', '_', pdf_file_name)
 pdf_dir_path = os.path.join(document_dir, 'pdf')
 if not os.path.exists(pdf_dir_path):
     os.makedirs(pdf_dir_path)
 pdf_file_path = os.path.join(pdf_dir_path, pdf_file_name)
+
+conversion_status = convert_to_pdf(docx_file_path, pdf_file_path)
+
+if conversion_status:
+    print(f"[{datetime.datetime.now()}] Converted successfully.")
+else:
+    print(f"[{datetime.datetime.now()}] Conversion failed.")
 
 # Check if the file already exists and update the name if necessary
 if os.path.isfile(pdf_file_path):
@@ -181,6 +208,8 @@ convert(docx_file_path, pdf_file_path)
 
 
 # Delete all image files in the QRCodes and VTags folders and their subdirectories
+print(f"[{datetime.datetime.now()}] Deleting all image files in the QRCodes and VTags folders and their subdirectories...")
+
 for root, dirs, files in os.walk("QRCodes"):
     for file in files:
         if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
@@ -190,3 +219,27 @@ for root, dirs, files in os.walk("VTags"):
     for file in files:
         if file.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
             os.remove(os.path.join(root, file))
+
+print(f"[{datetime.datetime.now()}] Deleted successfully.")
+
+print("\n")
+print("*" * 50)
+print(f"[{datetime.datetime.now()}] All operations have been completed successfully!")
+print("\n")
+print("███████████      ███████████     █████████████")
+print("██          ██    ██          ██   ██          ██")
+print("██  ███████  ██  ██  ███████  ██  ██  ███████  ██")
+print("██  ██   ██  ██  ██  ██   ██  ██  ██  ██   ██  ██")
+print("██          ██    ██          ██   ██          ██")
+print("███████████      ███████████     █████████████")
+print("                ██            ██")
+print("                ██  ███████████")
+print("██          ██    ██  ██    ██   █████████████")
+print("███████████      ██  ██    ██   ██          ██")
+print("██                ██  ██    ██   ██  ███████  ██")
+print("██  ███████████   ██  ██    ██   ██  ██   ██  ██")
+print("██          ██    ██  ██    ██   ██          ██")
+print("███████████      ███████████     █████████████")
+print("\n")
+print("*" * 50)
+print("\n")
