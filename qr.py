@@ -12,9 +12,9 @@ from generate_qr import generate_qr_with_label, generate_qr_from_file
 #------------------------------------------------------------------------------------------------------------------#
 #------------------------ GENERATE QR CODE FOR THE SET RANGES USING THE CUSTOM FUNCTION ---------------------------#
 #------------------------------------------------------------------------------------------------------------------#
-prefix = 'AEDCBD00'
-start = 11420
-end = 11801
+prefix = 'AEDCLT00'
+start = 6353
+end = 8353
 step = 1
 img = generate_qr_with_label(prefix, start, end, step)
 
@@ -22,9 +22,15 @@ img = generate_qr_with_label(prefix, start, end, step)
 #---------- GENERATE QR CODE FOR THE RANGE OF NUMBERS IN A CSV OR EXCEL FILE USING THE CUSTOM FUNCTION ------------#
 #------------------------------------------------------------------------------------------------------------------#
 
-file_path = os.path.join(os.path.expanduser("~"),"Downloads", "missing_qr_numbers")
-# Call the generate_qr_from_file function
-qr_codes = generate_qr_from_file(prefix, file_path)
+#----------- UNCOMMENT BELOW IF YOU WANT TO GENERATE TAG FOR NON SERIALIZED RANGES (EXCEL FILE *REQUIRED) ---------#
+
+# file_path = os.path.join(os.path.expanduser("~"),"Downloads", "missing_qr_numbers")
+# # Call the generate_qr_from_file function
+# qr_codes = generate_qr_from_file(prefix, file_path)
+
+#------------------------------------------------------------------------------------------------------------------#
+#----------------------------------- SET DOCUMENT ORIENTATION AND COLUMN NUMBER -----------------------------------#
+#------------------------------------------------------------------------------------------------------------------#
 
 orientation = "PORTRAIT" #LANDSCAPE, PORTRAIT
 columns = 3
@@ -41,7 +47,7 @@ elif prefix.startswith('ECG'):
 else:
     raise ValueError('Invalid prefix')
 
-asset = "BD"
+asset = prefix[4:6]
 dir_name = os.path.join(os.path.expanduser("~"),"OneDrive", "dev", "qr_code_tag_generator", "QRCodes", location)
 image_files = [f for f in os.listdir(dir_name) if f.endswith(".png")] # get a list of all PNG files in the folder
 
