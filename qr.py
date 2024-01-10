@@ -15,9 +15,9 @@ import datetime
 #------------------------------------------------------------------------------------------------------------------#
 print(f"[{datetime.datetime.now()}] Generating QR code for the set ranges...")
 
-prefix = 'AEDCCR00'
-start = 6353
-end = 6554
+prefix = 'YEDCCR00'
+start = 20
+end = 120
 step = 1
 img = generate_qr_with_label(prefix, start, end, step)
 
@@ -51,6 +51,9 @@ if prefix.startswith('AEDC'):
 elif prefix.startswith('ECG'):
     location = 'ECG'
     disco_logo = 'ecg-ghana.jpg'
+elif prefix.startswith('YEDC'):
+    location = 'YEDC'
+    disco_logo = 'yedc-logo.jpg'
 else:
     raise ValueError('Invalid prefix')
 

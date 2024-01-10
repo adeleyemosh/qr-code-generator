@@ -11,6 +11,8 @@ def generate_qr_with_label(prefix, start, end, step=1):
         directory = 'QRCodes/AEDC'
     elif 'ECG' in prefix:
         directory = 'QRCodes/ECG'
+    elif 'YEDC' in prefix:
+        directory = 'QRCodes/YEDC'
     else:
         directory = 'QRCodes'
 
@@ -100,6 +102,8 @@ def generate_qr_from_file(prefix, file_path):
         img_directory = 'QRCodes/AEDC'
     elif 'ECG' in prefix:
         img_directory = 'QRCodes/ECG'
+    elif 'YEDC' in prefix:
+        img_directory = 'QRCodes/YEDC'
     else:
         img_directory = 'QRCodes'
 
