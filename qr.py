@@ -15,9 +15,9 @@ import datetime
 #------------------------------------------------------------------------------------------------------------------#
 print(f"[{datetime.datetime.now()}] Generating QR code for the set ranges...")
 
-prefix = 'YEDCCR00'
-start = 20
-end = 120
+prefix = 'ECGCR'
+start = 1210010
+end = 1210020
 step = 1
 img = generate_qr_with_label(prefix, start, end, step)
 
