@@ -106,6 +106,8 @@ def generate_qr_from_file(prefix, file_path):
         img_directory = 'QRCodes/ECG'
     elif 'YEDC' in prefix:
         img_directory = 'QRCodes/YEDC'
+    elif 'IE' in prefix:
+        img_directory = 'QRCodes/IE'
     else:
         img_directory = 'QRCodes'
 
