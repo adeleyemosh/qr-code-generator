@@ -32,7 +32,7 @@ def generate_qr_with_label(prefix, start, end, step=1):
     # step = int(step)
     for num in range(start, end+1, step):
         # Create a new image to hold the QR code and label for the current tag
-        code = prefix + str(num).zfill(5)  # Pad the number with zeros to 5 digits
+        code = prefix + str(num).zfill(7)  # Pad the number with zeros to 5 digits
         img = Image.new('RGB', (qr_size, qr_size+font_size), color='white')
 
         # Generate the QR Code for the current tag and add it to the image
