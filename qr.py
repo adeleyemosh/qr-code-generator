@@ -15,7 +15,7 @@ import datetime
 #------------------------------------------------------------------------------------------------------------------#
 print(f"[{datetime.datetime.now()}] Generating QR code for the set ranges...")
 
-prefix = 'IEDT'
+prefix = 'IEDCDT'
 start = 1
 end = 300
 step = 1
@@ -54,8 +54,8 @@ elif prefix.startswith('ECG'):
 elif prefix.startswith('YEDC'):
     location = 'YEDC'
     disco_logo = 'yedc-logo.jpg'
-elif prefix.startswith('IE'):
-    location = 'IE'
+elif prefix.startswith('IEDC'):
+    location = 'IEDC'
     disco_logo = 'ie-logo.png'
 else:
     raise ValueError('Invalid prefix')
