@@ -13,6 +13,8 @@ def generate_qr_with_label(prefix, start, end, step=1):
         directory = 'QRCodes/ECG'
     elif 'YEDC' in prefix:
         directory = 'QRCodes/YEDC'
+    elif 'IE' in prefix:
+        directory = 'QRCodes/IE'
     else:
         directory = 'QRCodes'
 
